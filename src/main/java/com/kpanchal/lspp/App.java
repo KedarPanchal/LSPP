@@ -5,8 +5,13 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import com.kpanchal.lspp.tree.FileTree;;
+
 public class App {
     public static void main(String[] args) throws IOException {
-        Files.walk(Paths.get("C:/Users/astha/Documents/code/lspp/src"), FileVisitOption.FOLLOW_LINKS).forEach(path -> System.out.println(path));
+        FileTree tree = new FileTree();
+        Files.walk(Paths.get("C:/Users/astha/Documents/code/lspp/src"), FileVisitOption.FOLLOW_LINKS).forEach(path -> {
+            tree.add(path);
+        });
     }
 }
