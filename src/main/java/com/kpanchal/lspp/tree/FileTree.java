@@ -60,7 +60,7 @@ public class FileTree {
         private Path contents;
         private LinkedHashSet<FileTreeNode> children;
 
-        public FileTreeNode(Path path) {
+        private FileTreeNode(Path path) {
             this.contents = path;
             this.children = new LinkedHashSet<>();
         }
@@ -73,6 +73,10 @@ public class FileTree {
             return this.children.isEmpty();
         }
 
+        public int getChildrenCount() {
+            return this.children.size();
+        }
+
         public LinkedHashSet<FileTreeNode> getChildren() {
             return this.children;
         }
@@ -82,7 +86,12 @@ public class FileTree {
         }
 
         public String toString() {
-            return this.contents.toString();
+            return this.contents.getFileName().toString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return this.contents.equals(((FileTree.FileTreeNode) o).contents);
         }
     }
 }
