@@ -10,8 +10,8 @@ import com.kpanchal.lspp.tree.FileTree;;
 public class App {
     public static void main(String[] args) throws IOException {
         FileTree tree = new FileTree();
-        Files.walk(Paths.get("C:/Users/astha/Documents/code/lspp/src"), FileVisitOption.FOLLOW_LINKS).forEach(path -> {
-            tree.add(path);
-        });
+        Files.walk(Paths.get("C:/Users/astha/Documents/code/lspp/src/main/java/com/kpanchal/lspp/tree"), FileVisitOption.FOLLOW_LINKS).forEach(path -> tree.add(path));
+
+        System.out.println(tree.getDepth());
     }
 }

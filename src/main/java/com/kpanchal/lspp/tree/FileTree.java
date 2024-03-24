@@ -1,17 +1,28 @@
 package com.kpanchal.lspp.tree;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.nio.file.Path;
 
 public class FileTree {
     private FileTree.FileTreeNode head;
+    private int depth;
 
     public FileTree() {
         this.head = null;
+        this.depth = 0;
     }
 
-    public FileTree.FileTreeNode getHead() {
+    public FileTree(FileTree.FileTreeNode head) {
+        this.head = head;
+        this.depth = 0;
+    }
+
+    public FileTree.FileTreeNode getHead() { // I swear I'm mature
         return this.head;
+    }
+
+    public int getDepth() {
+        return this.depth;
     }
 
     public void add(Path toAdd) {
@@ -20,6 +31,7 @@ public class FileTree {
         } else {
             this.add(toAdd, head);
         }
+        this.depth = this.calculateDepth(head);
     }
 
     private boolean add(Path toAdd, FileTree.FileTreeNode current) {
@@ -36,20 +48,32 @@ public class FileTree {
         }
     }
 
+    private int calculateDepth(FileTree.FileTreeNode head) {
+        if (head.childless()) {
+            return 1;
+        } else {
+            return 1 + head.getChildren().stream().map(child -> calculateDepth(child)).max(Integer::compare).get();
+        } 
+    }
+
     public static class FileTreeNode {
         private Path contents;
-        private HashSet<FileTreeNode> children;
+        private LinkedHashSet<FileTreeNode> children;
 
         public FileTreeNode(Path path) {
             this.contents = path;
-            this.children = new HashSet<>();
+            this.children = new LinkedHashSet<>();
         }
 
         public Path getPath() {
             return this.contents;
         }
 
-        public HashSet<FileTreeNode> getChildren() {
+        public boolean childless() { // FREEDOM
+            return this.children.isEmpty();
+        }
+
+        public LinkedHashSet<FileTreeNode> getChildren() {
             return this.children;
         }
 
