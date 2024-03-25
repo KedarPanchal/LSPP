@@ -18,18 +18,6 @@ public class FileTreeWalker {
         listFiles(this.head, this.toDepth, "");
     }
 
-    private void listFiles(FileTree.FileTreeNode treeHead, int depth, String symbol, boolean diff) {
-        for (int i = this.toDepth - 1; i > depth; i--) {
-            System.out.print("    ");
-        }
-        System.out.print(symbol + treeHead.toString());
-        for (FileTree.FileTreeNode child : treeHead.getChildren()) {
-            String nextSymbol = child.equals(treeHead.getChildren().getLast()) ? "└── " : "├── "; 
-            System.out.println();
-            listFiles(child, depth - 1, nextSymbol);
-        }
-    }
-
     private void listFiles(FileTree.FileTreeNode treeHead, int depth, String symbol) {
         if (depth == 0) {
             return;
