@@ -15,9 +15,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.beust</groupId>
+            <groupId>org.jcommander</groupId>
             <artifactId>jcommander</artifactId>
-            <version>1.82</version>
+            <version>1.83</version>
         </dependency>
     </dependencies>
 
