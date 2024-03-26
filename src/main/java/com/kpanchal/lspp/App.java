@@ -12,7 +12,7 @@ import com.kpanchal.lspp.tree.FileTree;
 import com.kpanchal.lspp.tree.FileTreeWalker;;
 
 public class App {
-    private static final String VERSION = "1.0.0";
+    private static final String VERSION = "1.0.0-SNAPSHOT";
     public static void main(String[] args) throws IOException {
         Args arguments = new Args();
         JCommander commander = JCommander.newBuilder()
