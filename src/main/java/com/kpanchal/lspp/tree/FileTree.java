@@ -17,7 +17,7 @@ public class FileTree {
         this.depth = 0;
     }
 
-    public FileTree.FileTreeNode getHead() { // I swear I'm mature
+    public FileTree.FileTreeNode getHead() {
         return this.head;
     }
 

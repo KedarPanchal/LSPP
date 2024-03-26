@@ -9,13 +9,14 @@ public class Args {
     private Path directory = Path.of(System.getProperty("user.dir"));
 
     @Parameter(names={"-d", "--depth"})
-    private int depth = 0;
+    private Integer depth = null;
 
     @Parameter(names={"-s", "--search"})
-    private String fileName;
+    private String fileName = null;
 
     @Parameter(names={"-h", "--help"}, help=true)
-    private boolean help;
+    private boolean help = false;
 
-
+    @Parameter(names={"-v", "--version"})
+    private boolean version = false;
 }
