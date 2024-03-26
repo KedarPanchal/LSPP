@@ -9,7 +9,7 @@ public class Args {
     private Path directory = Path.of(System.getProperty("user.dir"));
 
     @Parameter(names={"-d", "--depth"})
-    private int depth = 0;
+    private Integer depth = null;
 
     @Parameter(names={"-s", "--search"})
     private String fileName;
@@ -22,4 +22,28 @@ public class Args {
 
     @Parameter(names={"-v", "--version"})
     private boolean version = false;
+
+    public Path getPath() {
+        return this.directory;
+    }
+
+    public Integer getDepth() {
+        return this.depth;
+    }
+
+    public String getFileName() {
+        return this.fileName;
+    }
+
+    public CharsetEnum getCharset() {
+        return this.charset;
+    }
+
+    public boolean getHelp() {
+        return this.help;
+    }
+
+    public boolean getVersion() {
+        return this.version;
+    }
 }
