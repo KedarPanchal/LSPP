@@ -9,10 +9,13 @@ public class Args {
     private Path directory = Path.of(System.getProperty("user.dir"));
 
     @Parameter(names={"-d", "--depth"})
-    private Integer depth = null;
+    private int depth = 0;
 
     @Parameter(names={"-s", "--search"})
-    private String fileName = null;
+    private String fileName;
+
+    @Parameter(names={"-c", "--charset"}, converter=CharsetConverter.class)
+    private CharsetEnum charset = CharsetEnum.BOX;
 
     @Parameter(names={"-h", "--help"}, help=true)
     private boolean help = false;

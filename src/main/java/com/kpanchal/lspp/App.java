@@ -17,7 +17,7 @@ public class App {
         FileTree tree = new FileTree();
         Files.walk(Paths.get("C:/Users/astha/Documents/code/lspp/src"), FileVisitOption.FOLLOW_LINKS).forEach(path -> tree.add(path));
 
-        FileTreeWalker walker = new FileTreeWalker(tree);
+        FileTreeWalker walker = new FileTreeWalker(tree, CharsetEnum.BOX);
         walker.listFiles();
     }
 }
