@@ -46,12 +46,4 @@ public class App {
     public static void depthList(FileTree tree, int depth, CharsetEnum charset) {
         (new FileTreeWalker(tree, depth, charset)).listFiles();
     }
-
-    public static void testFileWalker() throws IOException {
-        FileTree tree = new FileTree();
-        Files.walk(Path.of("C:/Users/astha/Documents/code/lspp/src"), FileVisitOption.FOLLOW_LINKS).forEach(path -> tree.add(path));
-
-        FileTreeWalker walker = new FileTreeWalker(tree, CharsetEnum.BOX);
-        walker.listFiles();
-    }
 }
