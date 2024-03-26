@@ -29,17 +29,16 @@ public class FileTreeWalker {
         }
 
         if (!symbol.isEmpty()) {
-            System.out.print(symbol.substring(0, symbol.length() - 4).replace(this.charset.getConnector(), this.charset.getPipe()).replace(this.charset.getTail(), "    ") + symbol.substring(symbol.length() - 4) + treeHead.toString());
+            System.out.print(symbol.substring(0, symbol.length() - 4).replace(this.charset.getConnector(), this.charset.getPipe()).replace(this.charset.getTail(), "    ").replaceAll("\n+", "\n") + symbol.substring(symbol.length() - 4) + treeHead.toString());
         } else {
             System.out.print(treeHead);
         }
 
         for (FileTree.FileTreeNode child : treeHead.getChildren()) {
-            System.out.println();
             if (child.equals(treeHead.getChildren().getLast())) {
-                this.listFiles(child, depth - 1, symbol + this.charset.getTail());
+                this.listFiles(child, depth - 1, "\n" + symbol + this.charset.getTail());
             } else {
-                this.listFiles(child, depth - 1, symbol + this.charset.getConnector());
+                this.listFiles(child, depth - 1, "\n" + symbol + this.charset.getConnector());
             }
         }
     }

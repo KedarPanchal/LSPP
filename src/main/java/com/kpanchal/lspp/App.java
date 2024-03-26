@@ -9,7 +9,7 @@ import com.beust.jcommander.JCommander;
 import com.kpanchal.lspp.args.Args;
 import com.kpanchal.lspp.args.CharsetEnum;
 import com.kpanchal.lspp.tree.FileTree;
-import com.kpanchal.lspp.tree.FileTreeWalker;;
+import com.kpanchal.lspp.tree.FileTreeWalker;
 
 public class App {
     private static final String VERSION = "1.0.0-SNAPSHOT";
@@ -24,7 +24,7 @@ public class App {
             commander.usage();
         } else if (arguments.getVersion()) {
             printVersion();
-        } else if (arguments.getDepth() != null) {
+        } else if (arguments.getDepth() != null && arguments.getDepth() > 0) {
             FileTree tree = buildFileTree(arguments.getPath());
             depthList(tree, arguments.getDepth(), arguments.getCharset());
         } else {
