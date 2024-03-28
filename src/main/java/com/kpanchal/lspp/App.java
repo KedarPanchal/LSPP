@@ -9,6 +9,7 @@ import com.beust.jcommander.JCommander;
 import com.kpanchal.lspp.args.Args;
 import com.kpanchal.lspp.args.CharsetEnum;
 import com.kpanchal.lspp.tree.FileTree;
+import com.kpanchal.lspp.tree.FileTreeSearcher;
 import com.kpanchal.lspp.tree.FileTreeWalker;
 
 public class App {
@@ -27,6 +28,9 @@ public class App {
         } else if (arguments.getDepth() != null && arguments.getDepth() > 0) {
             FileTree tree = buildFileTree(arguments.getPath());
             depthList(tree, arguments.getDepth(), arguments.getCharset());
+        } else if (arguments.getFileName() != null) {
+            FileTree tree = buildFileTree(arguments.getPath());
+            searchList(tree, Path.of(arguments.getFileName()), arguments.getCharset());
         } else {
             FileTree tree = buildFileTree(arguments.getPath());
             depthList(tree, tree.getDepth(), arguments.getCharset());
@@ -45,5 +49,9 @@ public class App {
 
     public static void depthList(FileTree tree, int depth, CharsetEnum charset) {
         (new FileTreeWalker(tree, depth, charset)).listFiles();
+    }
+
+    public static void searchList(FileTree tree, Path toSearch, CharsetEnum charset) {
+        (new FileTreeSearcher(tree, toSearch, charset)).printSearch();
     }
 }
