@@ -36,7 +36,9 @@ public class FileTree {
 
     private boolean add(Path toAdd, FileTree.FileTreeNode current) {
         if (current.getPath().equals(toAdd.getParent())) {
-            current.addChild(new FileTreeNode(toAdd));
+            FileTreeNode nodeToAdd = new FileTreeNode(toAdd);
+            nodeToAdd.setParent(current);
+            current.addChild(nodeToAdd);
             return true;
         } else {
             for (FileTree.FileTreeNode child : current.getChildren()) {
@@ -58,15 +60,25 @@ public class FileTree {
 
     public static class FileTreeNode {
         private Path contents;
+        private FileTreeNode parent;
         private LinkedHashSet<FileTreeNode> children;
 
         private FileTreeNode(Path path) {
             this.contents = path;
+            this.parent = null;
             this.children = new LinkedHashSet<>();
         }
 
         public Path getPath() {
             return this.contents;
+        }
+
+        public FileTreeNode getParent() {
+            return this.parent;
+        }
+
+        public void setParent(FileTreeNode parent) {
+            this.parent = parent;
         }
 
         public boolean childless() { // FREEDOM
