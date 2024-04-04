@@ -7,12 +7,12 @@ public class FileTree {
     private FileTree.FileTreeNode head;
     private int depth;
 
-    public FileTree() {
+    FileTree() {
         this.head = null;
         this.depth = 0;
     }
 
-    public FileTree(FileTree.FileTreeNode head) {
+    FileTree(FileTree.FileTreeNode head) {
         this.head = head;
         this.depth = 0;
     }
@@ -89,12 +89,23 @@ public class FileTree {
             return this.children.size();
         }
 
+        private boolean hasChild(FileTreeNode child) {
+            for (FileTreeNode kid : this.children) {
+                if (kid.toString().equals(child.toString())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public LinkedHashSet<FileTreeNode> getChildren() {
             return this.children;
         }
 
         public void addChild(FileTreeNode child) {
-            this.children.add(child);
+            if (!this.hasChild(child)) {
+                this.children.add(child);
+            }
         }
 
         public String toString() {

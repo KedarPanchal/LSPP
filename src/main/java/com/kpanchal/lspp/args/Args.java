@@ -14,6 +14,9 @@ public class Args {
     @Parameter(names={"-s", "--search"}, description="The file to search for. Only the file's parent directories will be displayed.")
     private String fileName = null;
 
+    @Parameter(names={"-a", "--search-all"}, description="The regular expression pattern used to search for files")
+    private String regex = null;
+
     @Parameter(names={"-c", "--charset"}, description="""
             The character set to use when displaying the tree. The current character sets available are:
             1. box
@@ -37,6 +40,10 @@ public class Args {
 
     public String getFileName() {
         return this.fileName;
+    }
+
+    public String getRegex() {
+        return this.regex;
     }
 
     public CharsetEnum getCharset() {
