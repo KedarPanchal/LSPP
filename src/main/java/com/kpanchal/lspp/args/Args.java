@@ -14,21 +14,17 @@ public class Args {
     @Parameter(names={"-s", "--search"}, description="The file to search for. Only the file's parent directories will be displayed.")
     private String fileName = null;
 
-    @Parameter(names={"-a", "--search-all"}, description="The regular expression pattern used to search for files")
+    @Parameter(names={"-a", "--search-all"}, description="The regular expression pattern used to search for files.")
     private String regex = null;
 
-    @Parameter(names={"-c", "--charset"}, description="""
-            The character set to use when displaying the tree. The current character sets available are:
-            1. box
-            2. ascii""",
-            converter=CharsetConverter.class)
+    @Parameter(names={"-c", "--charset"}, description="The character set to use when displaying the tree.", converter=CharsetConverter.class)
     private CharsetEnum charset = CharsetEnum.BOX;
 
     @Parameter(names={"-h", "--help"}, description="Lists the functionality of each of this program's parameters.", help=true)
     private boolean help = false;
 
-    @Parameter(names={"-v", "--version"}, description="Gets the version of this program.")
-    private boolean version = false;
+    @Parameter(names={"-v", "--version"}, description="Prints the version of this program.")
+    private boolean version;
 
     public Path getPath() {
         return this.directory;
