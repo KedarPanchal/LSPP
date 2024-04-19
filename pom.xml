@@ -11,6 +11,8 @@
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <imageName>lspp</imageName>
+        <mainClass>com.kpanchal.lspp.App</mainClass>
     </properties>
 
     <dependencies>
@@ -22,33 +24,8 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.2</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <agent>
-                                <enabled>true</enabled>
-                            </agent>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <transformers>
-                                <transformer implementation=
-                                "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.kpanchal.lspp.App</mainClass>
-                            </transformer>
-                        </transformers>
-                    </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -81,6 +58,54 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.source}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -93,22 +118,34 @@
                         <groupId>org.graalvm.buildtools</groupId>
                         <artifactId>native-maven-plugin</artifactId>
                         <version>0.10.1</version>
+                        <extensions>true</extensions>
                         <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
                             <execution>
                                 <id>test-native</id>
                                 <goals>
                                     <goal>test</goal>
                                 </goals>
-                                <phase>package</phase>
+                                <phase>test</phase>
                             </execution>
                         </executions>
                         <configuration>
-                            <imageName>lspp</imageName>
-                            <mainClass>com.kpanchal.lspp.App</mainClass>
+                            <mainClass>${mainClass}</mainClass>
                             <buildArgs>
                                 --no-fallback
                                 --verbose
+                                -H:DashboardDump=lspp
+                                -H:+DashboardAll
                             </buildArgs>
+                            <agent>
+                                <enabled>true</enabled>
+                            </agent>
                         </configuration>
                     </plugin>
                 </plugins>
