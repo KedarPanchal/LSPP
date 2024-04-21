@@ -1,13 +1,14 @@
 package com.kpanchal.lspp.args;
 
-import com.beust.jcommander.IStringConverter;
+import picocli.CommandLine.ITypeConverter;
 
-public class CharsetConverter implements IStringConverter<CharsetEnum> {
-    @Override
-    public CharsetEnum convert(String value) {
-        return switch(value.toUpperCase()) {
-            case "ASCII" -> CharsetEnum.ASCII;
-            default -> CharsetEnum.BOX;
-        };
+public class CharsetConverter implements ITypeConverter<CharsetEnum> {
+    public CharsetEnum convert(String value) throws Exception {
+        switch (value.toLowerCase()) {
+            case "box":
+                return CharsetEnum.BOX;
+            default:
+                return CharsetEnum.ASCII;
+        }
     }
 }
