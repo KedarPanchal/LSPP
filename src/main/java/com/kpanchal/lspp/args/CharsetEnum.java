@@ -2,6 +2,8 @@ package com.kpanchal.lspp.args;
 
 public enum CharsetEnum {
     BOX(new String[]{"│   ", "├── ", "└── "}),
+    ROUND(new String[]{"│   ", "├── ", "╰── "}),
+    TUBE(new String[]{"║   ", "╠══ ", "╚══ "}),
     ASCII(new String[]{"|   ", "+-- ", "\\-- "});
 
     private final String[] chars;

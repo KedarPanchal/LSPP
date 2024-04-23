@@ -94,6 +94,8 @@
                             <imageName>lspp</imageName>
                             <mainClass>com.kpanchal.lspp.App</mainClass>
                             <buildArgs>
+                                <buildArg>-Dfile.encoding=UTF-8</buildArg>
+                                <buildArg>-Dconsole.encoding=UTF-8</buildArg>
                                 <buildArg>--no-fallback</buildArg>
                                 <buildArg>--allow-incomplete-classpath</buildArg>
                             </buildArgs>
