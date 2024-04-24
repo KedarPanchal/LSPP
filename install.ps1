@@ -9,6 +9,6 @@ mvn -Pnative package
 
 Move-Item -Path "target\lspp.exe" -Destination $MovePath
 
-[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User) + ";" + $MovePath + "\lspp.exe", [System.EnvironmentVariableTarget]::User)
+[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User) + ";" + $MovePath, [System.EnvironmentVariableTarget]::User)
 
 Pop-Location
