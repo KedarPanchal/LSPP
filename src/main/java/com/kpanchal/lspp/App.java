@@ -25,12 +25,11 @@ import com.kpanchal.lspp.args.CharsetConverter;
 import com.kpanchal.lspp.args.CharsetEnum;
 import com.kpanchal.lspp.args.PathConverter;
 
-
-@Command(name="lspp", version="lspp 1.0", description="Lists the files in a folder in a tree-style output")
+@Command(name="lspp", version="lspp 1.0", description="Lists the files in a folder in a tree-style output", sortOptions=false)
 public class App implements Callable<Integer> {
     @Spec CommandSpec spec;
 
-    @Parameters(index = "0", defaultValue="", converter=PathConverter.class)
+    @Parameters(index = "0", defaultValue="", paramLabel="DIRECTORY", converter=PathConverter.class, description="The directory to list files in. If none is specified, then the current workign director's contents are listed")
     private Path directory;
 
     private int depth;
@@ -49,7 +48,7 @@ public class App implements Callable<Integer> {
     @Option(names={"-a", "--search-all"}, description="The regular expression pattern used to search for files")
     private String regex;
 
-    @Option(names={"-c", "--charset"}, defaultValue="ascii", converter=CharsetConverter.class, description="The charset to use when displaying the file tree. Valid values: ${COMPLETION-CANDIDATES}")
+    @Option(names={"-c", "--charset"}, defaultValue="ascii", converter=CharsetConverter.class, description="The charset to use when displaying the file tree. Valid values (case-insensitive): ${COMPLETION-CANDIDATES}")
     private CharsetEnum charset;
 
     @Option(names={"-v", "--version"}, versionHelp=true, description="Outputs the version of the program")
@@ -71,6 +70,10 @@ public class App implements Callable<Integer> {
         } else if (this.regex != null) {
             FileTree tree = this.buildFilteredTree(this.directory, this.regex);
             this.depthList(tree, tree.getDepth(), this.charset);
+        } else if (this.help) {
+            spec.commandLine().usage(System.out);
+        } else if (this.version) {
+             spec.commandLine().printVersionHelp(System.out);
         } else {
             FileTree tree = this.buildFileTree(this.directory);
             this.depthList(tree, tree.getDepth(), this.charset);
