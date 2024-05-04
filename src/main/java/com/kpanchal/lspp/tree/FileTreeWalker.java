@@ -21,6 +21,7 @@ public class FileTreeWalker {
 
     public void listFiles() {
         listFiles(this.head, this.toDepth, "");
+        System.out.println();
     }
 
     private void listFiles(FileTree.FileTreeNode treeHead, int depth, String symbol) {
