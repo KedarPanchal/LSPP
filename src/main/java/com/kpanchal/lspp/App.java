@@ -29,7 +29,7 @@ import com.kpanchal.lspp.args.PathConverter;
 public class App implements Callable<Integer> {
     @Spec CommandSpec spec;
 
-    @Parameters(index = "0", defaultValue="", paramLabel="DIRECTORY", converter=PathConverter.class, description="The directory to list files in. If none is specified, then the current workign director's contents are listed")
+    @Parameters(index = "0", defaultValue="", paramLabel="DIRECTORY", converter=PathConverter.class, description="The directory to list files in. If none is specified, then the current working director's contents are listed")
     private Path directory;
 
     private int depth;
