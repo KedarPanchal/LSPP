@@ -45,7 +45,7 @@ public class App implements Callable<Integer> {
     @Option(names={"-s", "--search"}, description="The name of the file to search for. Only the file and its parent directories will be displayed")
     private String fileName;
 
-    @Option(names={"-a", "--search-all"}, description="The regular expression pattern used to search for files")
+    @Option(names={"-a", "--search-all"}, description="Searches for all files that match the specified regex and lists a file tree containing only those files.")
     private String regex;
 
     @Option(names={"-c", "--charset"}, defaultValue="ascii", converter=CharsetConverter.class, description="The charset to use when displaying the file tree. Valid values (case-insensitive): ${COMPLETION-CANDIDATES}")
