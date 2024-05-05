@@ -1,6 +1,6 @@
-/.vscode
-/.idea
-/target
+/.vscode/
+/target/
+/.idea/
 /dependency-reduced-pom.xml
 lspp**.exe
 *.bgv
