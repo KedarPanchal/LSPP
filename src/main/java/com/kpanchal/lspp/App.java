@@ -42,7 +42,7 @@ public class App implements Callable<Integer> {
         }
     }
 
-    @Option(names={"-s", "--search"}, description="The file to search for. Only the file's parent directories will be displayed")
+    @Option(names={"-s", "--search"}, description="The name of the file to search for. Only the file and its parent directories will be displayed")
     private String fileName;
 
     @Option(names={"-a", "--search-all"}, description="The regular expression pattern used to search for files")
