@@ -29,11 +29,11 @@ import com.kpanchal.lspp.args.PathConverter;
 public class App implements Callable<Integer> {
     @Spec CommandSpec spec;
 
-    @Parameters(index = "0", defaultValue="", paramLabel="DIRECTORY", converter=PathConverter.class, description="The directory to list files in. If none is specified, then the current working directory's contents are listed")
+    @Parameters(index = "0", defaultValue="", paramLabel="DIRECTORY", converter=PathConverter.class, description="The directory to list files in. If none is specified, then the current working directory's contents are listed.")
     private Path directory;
 
     private int depth;
-    @Option(names={"-d", "--depth"}, defaultValue="0", description="The depth of the files to list in a tree")
+    @Option(names={"-d", "--depth"}, defaultValue="0", description="The depth of the files to list in a tree.")
     public void setDepth(int value) {
         if (value < 0) {
             throw new ParameterException(spec.commandLine(), String.format("Invalid value '%s' for option '--depth': value is not a positive integer", value));
@@ -42,19 +42,19 @@ public class App implements Callable<Integer> {
         }
     }
 
-    @Option(names={"-s", "--search"}, description="The name of the file to search for. Only the file and its parent directories will be displayed")
+    @Option(names={"-s", "--search"}, description="The name of the file to search for. Only the file and its parent directories will be displayed.")
     private String fileName;
 
     @Option(names={"-a", "--search-all"}, description="Searches for all files that match the specified regex and lists a file tree containing only those files.")
     private String regex;
 
-    @Option(names={"-c", "--charset"}, defaultValue="ascii", converter=CharsetConverter.class, description="The charset to use when displaying the file tree. Valid values (case-insensitive): ${COMPLETION-CANDIDATES}")
+    @Option(names={"-c", "--charset"}, defaultValue="ascii", converter=CharsetConverter.class, description="The charset to use when displaying the file tree (default: ASCII). Valid values (case-insensitive): ${COMPLETION-CANDIDATES}.")
     private CharsetEnum charset;
 
-    @Option(names={"-v", "--version"}, versionHelp=true, description="Outputs the version of the program")
+    @Option(names={"-v", "--version"}, versionHelp=true, description="Outputs the version of the program.")
     private boolean version;
 
-    @Option(names={"-h", "--help"}, usageHelp=true, description="Display usage information")
+    @Option(names={"-h", "--help"}, usageHelp=true, description="Displays this message.")
     private boolean help;
 
     @Override
