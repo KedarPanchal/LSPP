@@ -25,7 +25,7 @@ import com.kpanchal.lspp.args.CharsetConverter;
 import com.kpanchal.lspp.args.CharsetEnum;
 import com.kpanchal.lspp.args.PathConverter;
 
-@Command(name="lspp", version="lspp 1.0", description="Lists the files in a folder in a tree-style output", sortOptions=false)
+@Command(name="lspp", version="lspp 1.0", description="Lists the files in a folder in a tree-style output\n\nWritten by Kedar Panchal", sortOptions=false)
 public class App implements Callable<Integer> {
     @Spec CommandSpec spec;
 
