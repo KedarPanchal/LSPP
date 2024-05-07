@@ -100,7 +100,7 @@ To set the system locale to `UTF-8`, follow the following steps:
 1. Press `Win` + `R` on your keyboard to open the Run command.
    
   ![Run command menu](images/RunMenu.JPG)  
-2. Type `intl.cpl` and click the `OK` button to open the regional settings in Control Panel.
+2. Type `intl.cpl` and click the `OK` button to open the regional settings in Control Panel.  
 3. Navigate to the `Administrative` tab and click the `Change system locale...` button.  
 
   ![Regional settings menu](images/RegionalSettings.JPG)  
