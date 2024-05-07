@@ -33,8 +33,13 @@ Run the `install.ps1` script in a powershell instance. If running the installati
 [Windows troubleshooting](#troubleshooting-on-windows) section of this README.
 
 ### Linux or macOS
-Run the `install.sh` shell script in a terminal instance. If running the installation script doesn't work, refer to the
-[Linux/macOS troubleshooting](#troubleshooting-on-linux-or-macos) section of this README.
+Run the `install.sh` shell script in a terminal instance. Afterward, to add `lspp` to your path, add the following line
+to your `~/.bashrc` or `~/.bash_profile` file:
+```shell
+export PATH="/<path>/<to>/<lspp>/<parent>:$PATH";
+```
+Where `/<path>/<to>/<lspp>/<parent>` is the path to the parent directory of the `lspp` executable. If running the
+installation script doesn't work, refer to the [Linux/macOS troubleshooting](#troubleshooting-on-linux-or-macos) section of this README.
 
 ## Usage
 
