@@ -56,7 +56,7 @@ Lists the files in a folder in a tree-style output
 Written by Kedar Panchal
 
 DIRECTORY                    The directory to list files in. If none is specified, then the
-                             current working directory's contents are listed.
+                             contents of the current working directory are listed.
 -s, --search=<filename>      The name of the file to search for. Only the file and its parent
                              directories will be displayed.
 -a, --search-all=<filename>  Searches for all files that match the specified regex and lists a
