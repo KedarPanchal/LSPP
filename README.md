@@ -73,7 +73,7 @@ DIRECTORY                    The directory to list files in. If none is specifie
 ---
 [Back to top](#table-of-contents)
 > ### Note on building lspp
-> In order for `lspp` to be built as an executable, Maven requires that your environment's `JAVA_HOME` variable be set
+> For `lspp` to be built as an executable, Maven requires that your environment's `JAVA_HOME` variable be set
 > to your GraalVM installation path. If `install.ps1` or `install.sh` exit early due to the `JAVA_HOME` variable not
 > being configured correctly, ensure that the `JAVA_HOME` variable is set to your GraalVM installation location.
 
@@ -97,14 +97,17 @@ near-incomprehensible gibberish. To fix this, you need to set the system locale 
 in beta and may impact other aspects of your computer.
 
 To set the system locale to `UTF-8`, follow the following steps:
-1. Press `Win` + `R` on your keyboard to open the Run command. 
-![Run command menu](images/RunMenu.JPG)
-2. Type `intl.cpl` and click the `OK` button to open the regional settings in Control Panel.
-3. Navigate to the `Administrative` tab and click the `Change system locale...` button.
-![Regional settings menu](images/RegionalSettings.JPG)
-4. Check the `Beta: Use Unicode UTF-8 for worldwide language support` checkbox.
-![UTF-8 checkbox screen](images/UTF8Menu.JPG)
-5. Press the `OK` button and reboot.
+1. Press `Win` + `R` on your keyboard to open the Run command.
+   
+  ![Run command menu](images/RunMenu.JPG)
+3. Type `intl.cpl` and click the `OK` button to open the regional settings in Control Panel.
+4. Navigate to the `Administrative` tab and click the `Change system locale...` button.  
+
+  ![Regional settings menu](images/RegionalSettings.JPG)
+5. Check the `Beta: Use Unicode UTF-8 for worldwide language support` checkbox.  
+
+  ![UTF-8 checkbox screen](images/UTF8Menu.JPG)
+6. Press the `OK` button and reboot.
 ### Troubleshooting on Linux or macOS
 
 #### Shell script execution
