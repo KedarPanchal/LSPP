@@ -49,14 +49,14 @@ installation script doesn't work, refer to the [Linux/macOS troubleshooting](#tr
 To run `lspp`, type `lspp` in the terminal after installation. `lspp` takes in a variety of arguments to extend its
 functionality.
 
-```Shell
+```
 Usage: lspp [-hv] [-a=<regex>] [-c=<charset>] [-d=<depth>] [-s=<fileName>] DIRECTORY
 Lists the files in a folder in a tree-style output
 
 Written by Kedar Panchal
 
 DIRECTORY                    The directory to list files in. If none is specified, then the
-                             contents of the current working directory are listed.
+                             the current working directory's contents are listed.
 -s, --search=<filename>      The name of the file to search for. Only the file and its parent
                              directories will be displayed.
 -a, --search-all=<filename>  Searches for all files that match the specified regex and lists a
