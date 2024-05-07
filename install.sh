@@ -15,7 +15,7 @@ mvn clean package;
 mvn -Pnative package;
 
 # Move the lspp executable to the path specified by the user
-mv lspp "$Move_Path";
+mv target/lspp "$Move_Path";
 
 # Return to the original directory
 popd || (echo "Installation completed, failed to return to original directory" && exit);
