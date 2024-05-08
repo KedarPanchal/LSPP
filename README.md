@@ -33,7 +33,7 @@ Run the `install.ps1` script in a powershell instance. If running the installati
 [Windows troubleshooting](#troubleshooting-on-windows) section of this README.
 
 ### Linux or macOS
-Run the `install.sh` shell script in a terminal instance. Afterward, to add `lspp` to your path, add the following line
+Run the `install.sh` shell script in a terminal instance. Afterward add `lspp` to your path by adding the following line
 to your `~/.bashrc` or `~/.bash_profile` file:
 ```shell
 export PATH="/<path>/<to>/<lspp>/<parent>:$PATH";
@@ -91,23 +91,23 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope UserProfile
 This enables the current user to run `.ps1` scripts in PowerShell.
 
 #### Gibberish Charsets
-By default, Windows Command Prompt (and other Windows terminals) do not use `UTF-8` encoding by default. This means that
-when passing any `--charset` argument into `lspp` except for `ASCII`, the file tree is often outputted as
+By default, Windows Command Prompt (and other Windows terminals) do not use `UTF-8` encoding. This means that when
+passing any `--charset` argument into `lspp` except for `ASCII`, the file tree is often outputted as
 near-incomprehensible gibberish. To fix this, you need to set the system locale to `UTF-8`. Currently, this feature is
 in beta and may impact other aspects of your computer.
 
 To set the system locale to `UTF-8`, follow the following steps:
-1. Press `Win` + `R` on your keyboard to open the Run command.
+* Press `Win` + `R` on your keyboard to open the Run command.
    
   ![Run command menu](images/RunMenu.JPG)  
-2. Type `intl.cpl` and click the `OK` button to open the regional settings in Control Panel.  
-3. Navigate to the `Administrative` tab and click the `Change system locale...` button.  
+* Type `intl.cpl` and click the `OK` button to open the regional settings in Control Panel.  
+* Navigate to the `Administrative` tab and click the `Change system locale...` button.  
 
   ![Regional settings menu](images/RegionalSettings.JPG)  
-4. Check the `Beta: Use Unicode UTF-8 for worldwide language support` checkbox.  
+* Check the `Beta: Use Unicode UTF-8 for worldwide language support` checkbox.  
 
   ![UTF-8 checkbox screen](images/UTF8Menu.JPG)  
-5. Press the `OK` button and reboot.
+* Press the `OK` button and reboot.
 ### Troubleshooting on Linux or macOS
 
 #### Shell script execution
