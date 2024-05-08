@@ -25,8 +25,8 @@
 [Back to top](#table-of-contents)
 > ### Prerequisites
 > The following tools need to be installed on your computer to build `lspp` from source.
-> * Maven 3.9.6+
-> * GraalVM JDK 21+
+> * [Maven 3.9.6+](https://maven.apache.org/download.cgi)
+> * [GraalVM JDK 21+](https://www.graalvm.org/downloads/)
 
 ### Windows
 Run the `install.ps1` script in a powershell instance. If running the installation script doesn't work, refer to the
