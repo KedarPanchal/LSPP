@@ -9,7 +9,11 @@
 * [Installation](#installation)
   * [Prerequisites](#prerequisites)
   * [On Windows](#windows)
+    * [Downloading the executable](#downloading-the-executables)
+    * [Building from source](#building-from-source)
   * [On Linux or macOS](#linux-or-macOS)
+    * [Downloading the executable jar](#downloading-the-executable-jar)
+    * [Building from source](#building-from-source-1)
 * [Usage](#usage)
 * [Troubleshooting](#troubleshooting)
   * [On Windows](#troubleshooting-on-windows)
@@ -29,12 +33,45 @@
 > * [GraalVM JDK 21+](https://www.graalvm.org/downloads/)
 
 ### Windows
-Run the `install.ps1` script in a powershell instance. If running the installation script doesn't work, refer to the
-[Windows troubleshooting](#troubleshooting-on-windows) section of this README.
+
+#### Downloading the executables
+Install and extract the `Windows executable + executuable jar (.zip)` file from the
+[latest release](https://github.com/KedarPanchal/). Add the `lspp.exe` executable to your path by running the following
+in a powershell instance:
+```powershell
+[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User) + ";" + "C:\path\to\lspp\parent", [System.EnvironmentVariableTarget]::User)
+```
+Where `C:\path\to\lspp\parent` is the path to the parent directory of the `lspp.exe` executable.  
+
+To run the `lspp.jar` executable jar, type the following in a terminal instance (you must have JDK 21+ installed on your
+computer to run the `lspp.jar` file):
+```shell
+java -jar "C:\path\to\lspp.jar <arguments>"
+```
+Where `<arguments>` are the arguments passed into the program as described in the [Usage](#usage) section of this
+README.
+
+#### Building from source
+Install and extract the `lspp_source (.zip)` from the [latest release](https://github.com/KedarPanchal/releases/latest).
+Navigate to the extracted directory in a powershell instance and run the `install.ps1` script. If running the
+installation script doesn't work, refer to the [Windows troubleshooting](#troubleshooting-on-windows) section of this README.
 
 ### Linux or macOS
-Run the `install.sh` shell script in a terminal instance. Afterward add `lspp` to your path by adding the following line
-to your `~/.bashrc` or `~/.bash_profile` file:
+
+#### Downloading the executable jar
+Install and extract the `Windows executable + executable jar (.tar.gz)` file from the
+[latest release](https://github.com/KedarPanchal/). To run the `lspp.jar` executable jar, type the following in a
+terminal instance (you must have JDK 21+ installed on your computer to run the `lspp.jar` file):
+```shell
+java -jar "/path/to/lspp.jar <arguments>"
+```
+Where `<arguments>` are the arguments passed into the program as described in the [Usage](#usage) section of this
+README.
+
+#### Building from source
+Install and extract the `lspp_source (.tar.gz)` from the [latest release](https://github.com/KedarPanchal/).
+Navigate to the extracted directory in a terminal instance and run the `install.sh` shell script. Afterward add `lspp`
+to your path by adding the following line to your `~/.bashrc` or `~/.bash_profile` file:
 ```shell
 export PATH="/<path>/<to>/<lspp>/<parent>:$PATH";
 ```
