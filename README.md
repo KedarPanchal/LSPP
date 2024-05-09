@@ -35,7 +35,7 @@
 ### Windows
 
 #### Downloading the executables
-Install and extract the `Windows executable + executuable jar (.zip)` file from the
+Install and extract the `Windows executable + executuable .jar (.zip)` file from the
 [latest release](https://github.com/KedarPanchal/). Add the `lspp.exe` executable to your path by running the following
 in a powershell instance:
 ```powershell
@@ -59,7 +59,7 @@ installation script doesn't work, refer to the [Windows troubleshooting](#troubl
 ### Linux or macOS
 
 #### Downloading the executable jar
-Install and extract the `Windows executable + executable jar (.tar.gz)` file from the
+Install and extract the `Windows executable + executable .jar (.tar.gz)` file from the
 [latest release](https://github.com/KedarPanchal/). To run the `lspp.jar` executable jar, type the following in a
 terminal instance (you must have JDK 21+ installed on your computer to run the `lspp.jar` file):
 ```shell
