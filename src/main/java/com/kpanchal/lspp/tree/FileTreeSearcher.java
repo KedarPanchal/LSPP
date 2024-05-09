@@ -10,7 +10,8 @@ import com.kpanchal.lspp.args.CharsetEnum;
 public class FileTreeSearcher {
     private FileTree.FileTreeNode head;
     private Path toSearch;
-    private CharsetEnum charset;
+    // The charset to use when printing out the single-branched tree
+    private final CharsetEnum charset;
 
     public FileTreeSearcher(FileTree tree, Path path, CharsetEnum charset) {
         this.head = tree.getHead();
