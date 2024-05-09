@@ -54,14 +54,17 @@ public class FileTree {
         if (head.childless()) {
             return 1;
         } else {
-            return 1 + head.getChildren().stream().map(child -> calculateDepth(child)).max(Integer::compare).get();
+            return 1 + head.getChildren().stream().map(this::calculateDepth).max(Integer::compare).get();
         } 
     }
 
     public static class FileTreeNode {
-        private Path contents;
+        // The Path stored by this node
+        private final Path contents;
+        // The parent node of this node
         private FileTreeNode parent;
-        private LinkedHashSet<FileTreeNode> children;
+        // A set of all the children nodes of this node
+        private final LinkedHashSet<FileTreeNode> children;
 
         private FileTreeNode(Path path) {
             this.contents = path;

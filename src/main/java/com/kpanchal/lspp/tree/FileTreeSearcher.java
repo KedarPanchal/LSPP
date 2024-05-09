@@ -64,7 +64,7 @@ public class FileTreeSearcher {
 
         while (current.getParent() != null) {
             current = current.getParent();
-            ret.add(0, current);
+            ret.addFirst(current);
         }
         return ret;
     }
