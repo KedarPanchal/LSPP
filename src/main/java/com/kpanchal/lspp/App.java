@@ -80,37 +80,64 @@ public class App implements Callable<Integer> {
      * @return the following error codes:
      *         <ul>
      *             <li>{@code 0} if the program executes successfully</li>
-     *             <li>{@code 1} if a file cannot be found</li>
+     *             <li>{@code 1} if a FileTree cannot be constructed</li>
+     *             <li>{@code 2} if a file being searched for cannot be found</li>
      *         </ul>
-     * @throws Exception if the file tree cannot be constructed -- TODO replace this with error codes
      */
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         this.validate();
 
         if (this.depth > 0) {
-            FileTree tree = this.buildFileTree(this.directory);
-            this.depthList(tree, this.depth, this.charset);
+            try {
+                FileTree tree = this.buildFileTree(this.directory);
+                this.depthList(tree, this.depth, this.charset);
+            } catch (IOException e) {
+                System.err.println("Error: cannot build file tree");
+                return 1;
+            }
         } else if (this.fileName != null) {
-            FileTree tree = this.buildFileTree(this.directory);
-            this.searchList(tree, Path.of(this.fileName), this.charset);
+            try {
+                FileTree tree = this.buildFileTree(this.directory);
+                this.searchList(tree, Path.of(this.fileName), this.charset);
+            } catch (FileNotFoundException e) {
+                System.err.println("Error: file not found");
+                return 2;
+            } catch (IOException e) {
+                System.err.println("Error: cannot build file tree");
+                return 1;
+            }
         } else if (this.regex != null) {
-            FileTree tree = this.buildFilteredTree(this.directory, this.regex);
-            this.depthList(tree, tree.getDepth(), this.charset);
+            try {
+                FileTree tree = this.buildFilteredTree(this.directory, this.regex);
+                this.depthList(tree, tree.getDepth(), this.charset);
+            } catch (IOException e) {
+                System.err.println("Error: cannot build filtered file tree");
+                return 1;
+            }
         } else if (this.help) {
             spec.commandLine().usage(System.out);
         } else if (this.version) {
              spec.commandLine().printVersionHelp(System.out);
         } else {
-            FileTree tree = this.buildFileTree(this.directory);
-            this.depthList(tree, tree.getDepth(), this.charset);
+            try {
+                FileTree tree = this.buildFileTree(this.directory);
+                this.depthList(tree, tree.getDepth(), this.charset);
+            } catch (IOException e) {
+                System.err.println("Error: cannot build file tree");
+                return 1;
+            }
         }
 
         return 0;
     }
 
     public static void main(String[] args) {
-        System.exit(new CommandLine(new App()).execute(args));
+        int result = new CommandLine(new App()).execute(args);
+        if (result != 0) {
+            System.err.println("Exiting with error code " + result);
+        }
+        System.exit(result);
     }
 
     /**
