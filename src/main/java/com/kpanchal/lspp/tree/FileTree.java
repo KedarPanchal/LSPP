@@ -14,7 +14,7 @@ public class FileTree {
 
     FileTree(FileTree.FileTreeNode head) {
         this.head = head;
-        this.depth = 0;
+        this.depth = 1;
     }
 
     public FileTree.FileTreeNode getHead() {
@@ -85,10 +85,6 @@ public class FileTree {
             return this.children.isEmpty();
         }
 
-        public int getChildrenCount() {
-            return this.children.size();
-        }
-
         private boolean hasChild(FileTreeNode child) {
             for (FileTreeNode kid : this.children) {
                 if (kid.toString().equals(child.toString())) {
@@ -108,6 +104,7 @@ public class FileTree {
             }
         }
 
+        @Override
         public String toString() {
             return this.contents.getFileName().toString();
         }
