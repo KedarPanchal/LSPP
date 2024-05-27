@@ -1,5 +1,6 @@
 package com.kpanchal.lspp;
 
+import java.io.UncheckedIOException;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -89,7 +90,7 @@ public class App implements Callable<Integer> {
                 try {
                     FileTree tree = this.buildSearchTree(this.directory, Path.of(this.fileName), this.depth);
                     this.depthList(tree, this.charset);
-                } catch (IOException e) {
+                } catch (IOException | UncheckedIOException e) {
                     System.err.println("Error: cannot build file tree");
                     return 1;
                 }
@@ -97,7 +98,7 @@ public class App implements Callable<Integer> {
                 try {
                     FileTree tree = this.buildFilteredTree(this.directory, this.regex, this.depth);
                     this.depthList(tree, this.charset);
-                } catch (IOException e) {
+                } catch (IOException | UncheckedIOException e) {
                     System.err.println("Error: cannot build file tree");
                     return 1;
                 }
@@ -105,7 +106,7 @@ public class App implements Callable<Integer> {
                 try {
                     FileTree tree = this.buildFileTree(this.directory, this.depth);
                     this.depthList(tree, this.charset);
-                } catch (IOException e) {
+                } catch (IOException | UncheckedIOException e) {
                     System.err.println("Error: cannot build file tree");
                     return 1;
                 }
@@ -115,7 +116,7 @@ public class App implements Callable<Integer> {
                 try {
                     FileTree tree = this.buildSearchTree(this.directory, Path.of(this.fileName));
                     this.depthList(tree, this.charset);
-                } catch (IOException e) {
+                } catch (IOException | UncheckedIOException e) {
                     System.err.println("Error: cannot build file tree");
                     return 1;
                 }
@@ -135,7 +136,7 @@ public class App implements Callable<Integer> {
                 try {
                     FileTree tree = this.buildFileTree(this.directory);
                     this.depthList(tree, this.charset);
-                } catch (IOException e) {
+                } catch (IOException | UncheckedIOException e) {
                     System.err.println("Error: cannot build file tree");
                     return 1;
                 }
