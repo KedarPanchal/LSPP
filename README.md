@@ -94,9 +94,9 @@ Written by Kedar Panchal
 
 DIRECTORY                    The directory to list files in. If none is specified, then the
                              the current working directory's contents are listed.
--s, --search=<filename>      The name of the file to search for. Only the file and its parent
-                             directories will be displayed.
--a, --search-all=<filename>  Searches for all files that match the specified regex and lists a
+-s, --search=<filename>      The name of the file to search for. Only the files and their
+                             parent directories will be displayed.
+-r, --regex=<filename>       Searches for all files that match the specified regex and lists a
                              file tree containing only those files.
 -c, --charset=<charset>      The charset to use when displaying the file tree (default: ASCII).
                              Valid values (case-insensitive): BOX, ROUND, TUBE, ASCII.

@@ -1,6 +1,5 @@
 package com.kpanchal.lspp;
 
-import java.io.FileNotFoundException;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -19,7 +18,6 @@ import picocli.CommandLine.Command;
 
 import com.kpanchal.lspp.tree.FileTree;
 import com.kpanchal.lspp.tree.FileTreeFactory;
-import com.kpanchal.lspp.tree.FileTreeSearcher;
 import com.kpanchal.lspp.tree.FileTreeWalker;
 
 import com.kpanchal.lspp.args.CharsetConverter;
@@ -53,13 +51,13 @@ public class App implements Callable<Integer> {
     }
 
     // The name of the file to search for, if there are any
-    @Option(names={"-s", "--search"}, description="The name of the file to search for. Only the file and its parent directories will be displayed.")
+    @Option(names={"-s", "--search"}, description="The name of the file to search for. Only the files matching the name provided and their parent directories will be displayed.")
     private String fileName;
 
     // The regular expression used to construct a filtered FileTree with, which only contains the files and
     // subdirectories in the directory being searched that match the following regular expression, along with their
     // parent directories relative to the directory being searched
-    @Option(names={"-a", "--search-all"}, description="Searches for all files that match the specified regex and lists a file tree containing only those files.")
+    @Option(names={"-r", "--regex"}, description="Searches for all files that match the specified regex and lists a file tree containing only those files.")
     private String regex;
 
     // The charset used to display the FileTree with
@@ -81,51 +79,66 @@ public class App implements Callable<Integer> {
      *         <ul>
      *             <li>{@code 0} if the program executes successfully</li>
      *             <li>{@code 1} if a FileTree cannot be constructed</li>
-     *             <li>{@code 2} if a file being searched for cannot be found</li>
      *         </ul>
      */
     @Override
     public Integer call() {
         this.validate();
-
         if (this.depth > 0) {
-            try {
-                FileTree tree = this.buildFileTree(this.directory);
-                this.depthList(tree, this.depth, this.charset);
-            } catch (IOException e) {
-                System.err.println("Error: cannot build file tree");
-                return 1;
+            if (this.fileName != null) {
+                try {
+                    FileTree tree = this.buildSearchTree(this.directory, Path.of(this.fileName), this.depth);
+                    this.depthList(tree, this.charset);
+                } catch (IOException e) {
+                    System.err.println("Error: cannot build file tree");
+                    return 1;
+                }
+            } else if (this.regex != null) {
+                try {
+                    FileTree tree = this.buildFilteredTree(this.directory, this.regex, this.depth);
+                    this.depthList(tree, this.charset);
+                } catch (IOException e) {
+                    System.err.println("Error: cannot build file tree");
+                    return 1;
+                }
+            } else {
+                try {
+                    FileTree tree = this.buildFileTree(this.directory, this.depth);
+                    this.depthList(tree, this.charset);
+                } catch (IOException e) {
+                    System.err.println("Error: cannot build file tree");
+                    return 1;
+                }
             }
-        } else if (this.fileName != null) {
-            try {
-                FileTree tree = this.buildFileTree(this.directory);
-                this.searchList(tree, Path.of(this.fileName), this.charset);
-            } catch (FileNotFoundException e) {
-                System.err.println("Error: file not found");
-                return 2;
-            } catch (IOException e) {
-                System.err.println("Error: cannot build file tree");
-                return 1;
-            }
-        } else if (this.regex != null) {
-            try {
-                FileTree tree = this.buildFilteredTree(this.directory, this.regex);
-                this.depthList(tree, tree.getDepth(), this.charset);
-            } catch (IOException e) {
-                System.err.println("Error: cannot build filtered file tree");
-                return 1;
-            }
-        } else if (this.help) {
-            spec.commandLine().usage(System.out);
-        } else if (this.version) {
-             spec.commandLine().printVersionHelp(System.out);
         } else {
-            try {
-                FileTree tree = this.buildFileTree(this.directory);
-                this.depthList(tree, tree.getDepth(), this.charset);
-            } catch (IOException e) {
-                System.err.println("Error: cannot build file tree");
-                return 1;
+            if (this.fileName != null) {
+                try {
+                    FileTree tree = this.buildSearchTree(this.directory, Path.of(this.fileName));
+                    this.depthList(tree, this.charset);
+                } catch (IOException e) {
+                    System.err.println("Error: cannot build file tree");
+                    return 1;
+                }
+            } else if (this.regex != null) {
+                try {
+                    FileTree tree = this.buildFilteredTree(this.directory, this.regex);
+                    this.depthList(tree, this.charset);
+                } catch (IOException e) {
+                    System.err.println("Error: cannot build file tree");
+                    return 1;
+                }
+            } else if (this.help) {
+                spec.commandLine().usage(System.out);
+            } else if (this.version) {
+                spec.commandLine().printVersionHelp(System.out);
+            } else {
+                try {
+                    FileTree tree = this.buildFileTree(this.directory);
+                    this.depthList(tree, this.charset);
+                } catch (IOException e) {
+                    System.err.println("Error: cannot build file tree");
+                    return 1;
+                }
             }
         }
 
@@ -141,22 +154,24 @@ public class App implements Callable<Integer> {
     }
 
     /**
-     * Validates the arguments passed into the {@code lspp} command by checking if the {@code --depth},
-     * {@code --search}, {@code --search-all}, {@code --version}, and {@code --help} commands aren't used in tandem with
-     * each other
+     * Validates the arguments passed into the {@code lspp} command by checking if the {@code --search},
+     * {@code --regex}, {@code --version}, and {@code --help} commands aren't used in tandem with each other
      * @throws ParameterException if more than one of the arguments listed above are passed into the {@code lspp}
      *                            command
      */
     private void validate() throws ParameterException {
         ArrayList<Boolean> validateList = new ArrayList<>();
-        validateList.add(depth > 0);
-        validateList.add(fileName != null);
-        validateList.add(regex != null);
-        validateList.add(version);
-        validateList.add(help);
+        validateList.add(this.fileName != null);
+        validateList.add(this.regex != null);
+        validateList.add(this.version);
+        validateList.add(this.help);
 
         if (validateList.stream().filter(b -> b).count() > 1) {
             throw new ParameterException(spec.commandLine(), "Error: too many arguments");
+        }
+
+        if (this.version || this.help) {
+            this.depth = 0;
         }
     }
 
@@ -174,6 +189,25 @@ public class App implements Callable<Integer> {
         FileTreeFactory treeFactory = new FileTreeFactory();
         FileTree tree = treeFactory.makeFileTree();
         Files.walk(path, FileVisitOption.FOLLOW_LINKS).forEach(tree::add);
+        return tree;
+    }
+
+    /**
+     * Constructs a FileTree from a provided Path using its contents, subdirectories, and subdirectories' contents up to
+     * a given depth
+     * @param path the path of the directory to construct a FileTree to
+     * @param depth the maximum directory level to construct the FileTree for
+     * @return a FileTree constructed from the provided directory up to a certain depth
+     * @throws IOException if the Path provided is not a directory, or if the directory's contents cannot be accessed
+     */
+    public FileTree buildFileTree(Path path, int depth) throws IOException {
+        if (!Files.isDirectory(path)) {
+            throw new IOException("Error: file provided is not a directory");
+        }
+
+        FileTreeFactory treeFactory = new FileTreeFactory();
+        FileTree tree = treeFactory.makeFileTree();
+        Files.walk(path, depth, FileVisitOption.FOLLOW_LINKS).forEach(tree::add);
         return tree;
     }
 
@@ -202,24 +236,86 @@ public class App implements Callable<Integer> {
     }
 
     /**
-     * Prints out the contents of a FileTree until a specific depth
-     * @param tree the FileTree whose contents are going to be printed out
-     * @param depth the number of layers of the FileTree to print out
-     * @param charset the charset to use when printing out the FileTree
+     * Constructs a FileTree from a provided Path containing only its contents that match the provided regular
+     * expression, along with the parent directories of those contents relative to the provided Path up to a certain
+     * depth
+     * @param path the path of the directory to construct a FileTree for
+     * @param regex the regular expression to apply for the contents of the path parameter
+     * @param depth the maximum directory level to construct the FileTree to
+     * @return a FileTree constructed from the provided directory containing only its contents that match the provided
+     *         regular expression and those contents' parent directories relative to the provided Path up to a certain
+     *         depth
+     * @throws IOException if the Path provided is not a directory, or if the directory's contents cannot be accessed
      */
-    public void depthList(FileTree tree, int depth, CharsetEnum charset) {
-        (new FileTreeWalker(tree, depth, charset)).listFiles();
+    public FileTree buildFilteredTree(Path path, String regex, int depth) throws IOException {
+        if (!Files.isDirectory(path)) {
+            throw new IOException("Error: file provided is not a directory");
+        }
+
+        FileTreeFactory treeFactory = new FileTreeFactory();
+        ArrayList<Path> allMatching = new ArrayList<>();
+        Files.walk(path, depth, FileVisitOption.FOLLOW_LINKS).forEach(p -> {
+            if (p.toString().matches(regex) || p.getFileName().toString().matches(regex)) {
+                allMatching.add(path.getFileName().resolve(path.relativize(p)));
+            }
+        });
+        return treeFactory.makeFileTree(allMatching);
     }
 
     /**
-     * Searches for a file within a FileTree and prints out a single-branched tree containing the found file and its
-     * parent directories relative to the Path of the head of the FileTree being searched
-     * @param tree the FileTree being searched
-     * @param toSearch the Path of the file being searched
-     * @param charset the charset to use when printing out the single-branched tree
-     * @throws FileNotFoundException if the file being searched for does not exist
+     * Prints out the contents of a FileTree until a specific depth
+     * @param tree the FileTree whose contents are going to be printed out
+     * @param charset the charset to use when printing out the FileTree
      */
-    public void searchList(FileTree tree, Path toSearch, CharsetEnum charset) throws FileNotFoundException {
-        (new FileTreeSearcher(tree, toSearch, charset)).printSearch();
+    public void depthList(FileTree tree, CharsetEnum charset) {
+        (new FileTreeWalker(tree, charset)).listFiles();
+    }
+
+    /**
+     * Constructs a FileTree from a provided Path containing only its contents that match the provided filename, along
+     * with the parent directories of those contents relative to the provided Path
+     * @param path the path of the directory to construct a FileTree for
+     * @param toSearch the name of the file to search for
+     * @return a FileTree constructed from the provided directory containing only its contents that match the provided
+     *         filename and those contents' parent directories relative to the provided Path
+     * @throws IOException if the Path provided is not a directory, or if the directory's contents cannot be accessed
+     */
+    public FileTree buildSearchTree (Path path, Path toSearch) throws IOException {
+        if (!Files.isDirectory(path)) {
+            throw new IOException("Error: file provided is not a directory");
+        }
+
+        FileTreeFactory treeFactory = new FileTreeFactory();
+        ArrayList<Path> allMatching = new ArrayList<>();
+        Files.walk(path, FileVisitOption.FOLLOW_LINKS).forEach(p -> {
+            if (toSearch.equals(p) || toSearch.equals(p.getFileName())) {
+                allMatching.add(path.getFileName().resolve(path.relativize(p)));
+            }
+        });
+        return treeFactory.makeFileTree(allMatching);
+    }
+
+    /**
+     * Constructs a FileTree from a provided Path containing only its contents that match the provided filename, along
+     * with the parent directories of those contents relative to the provided Path up to a certain depth
+     * @param path the path of the directory to construct a FileTree for
+     * @param toSearch the name of the file to search for
+     * @return a FileTree constructed from the provided directory containing only its contents that match the provided
+     *         filename and those contents' parent directories relative to the provided Path up to a certain depth
+     * @throws IOException if the Path provided is not a directory, or if the directory's contents cannot be accessed
+     */
+    public FileTree buildSearchTree (Path path, Path toSearch, int depth) throws IOException {
+        if (!Files.isDirectory(path)) {
+            throw new IOException("Error: file provided is not a directory");
+        }
+
+        FileTreeFactory treeFactory = new FileTreeFactory();
+        ArrayList<Path> allMatching = new ArrayList<>();
+        Files.walk(path, depth, FileVisitOption.FOLLOW_LINKS).forEach(p -> {
+            if (toSearch.equals(p) || toSearch.equals(p.getFileName())) {
+                allMatching.add(path.getFileName().resolve(path.relativize(p)));
+            }
+        });
+        return treeFactory.makeFileTree(allMatching);
     }
 }
