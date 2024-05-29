@@ -30,7 +30,7 @@ import com.kpanchal.lspp.args.PathConverter;
  * structure
  * @author Kedar Panchal
  */
-@Command(name="lspp", version="lspp 1.0.1", description="Lists the files in a folder in a tree-style output\n\nWritten by Kedar Panchal\n", sortOptions=false)
+@Command(name="lspp", version="lspp 2.0.0", description="Lists the files in a folder in a tree-style output\n\nWritten by Kedar Panchal\n", sortOptions=false)
 public class App implements Callable<Integer> {
     // Contains version and help information for the lspp command
     @Spec CommandSpec spec;
