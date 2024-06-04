@@ -156,6 +156,6 @@ chmod +x install.sh
 ## License
 
 ---
-[Back to top](#table-of-contents)
+[Back to top](#table-of-contents)  
 The BSD 3-Clause License (BSD-3) 2024 - [Kedar Panchal](https://github.com/KedarPanchal). Please look at the
 [LICENSE](LICENSE) for further information.
