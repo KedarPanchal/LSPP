@@ -99,11 +99,14 @@ DIRECTORY                    The directory to list files in. If none is specifie
 -r, --regex=<filename>       Searches for all files that match the specified regex and lists a
                              file tree containing only those files.
 -c, --charset=<charset>      The charset to use when displaying the file tree (default: ASCII).
-                             Valid values (case-insensitive): BOX, ROUND, TUBE, ASCII.
+                             Valid values (case-insensitive): ASCII, BOX, ROUND, TUBE.
+-n, --no-skip                Attempt to include files without read/access permissions in the file tree.
 -v, --version                Outputs the version of the program.
 -h, --help                   Displays this message.
 -d, --depth=<depth>          The depth of the files to list in a tree.
 ```
+### The `LSPP_CHARSET` environment variable
+Setting an environment variable named `LSPP_CHARSET` on your system to any one of the available options for the `--charset` flag provides the `lspp` program with a default charset to use (other than `ASCII`) without needing to specify that charset using the `--charset` flag.  
 
 ## Troubleshooting
 
