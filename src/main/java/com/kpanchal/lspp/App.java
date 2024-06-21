@@ -3,11 +3,15 @@ package com.kpanchal.lspp;
 import java.io.UncheckedIOException;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
@@ -62,8 +66,13 @@ public class App implements Callable<Integer> {
     private String regex;
 
     // The charset used to display the FileTree with
-    @Option(names={"-c", "--charset"}, defaultValue="ascii", converter=CharsetConverter.class, description="The charset to use when displaying the file tree (default: ASCII). Valid values (case-insensitive): ${COMPLETION-CANDIDATES}.")
+    @Option(names={"-c", "--charset"}, defaultValue="", description="The charset to use when displaying the file tree (default: ASCII). Valid values (case-insensitive): ${COMPLETION-CANDIDATES}.")
+    private String charsetString;
     private CharsetEnum charset;
+
+    // Whether to include files without permissions or not
+    @Option(names={"-n", "--no-skip"}, description="Attempt to include files without read/access permissions in the outputted file tree.")
+    private boolean noSkip;
 
     // Whether to display version information or not
     @Option(names={"-v", "--version"}, versionHelp=true, description="Outputs the version of the program.")
@@ -174,6 +183,12 @@ public class App implements Callable<Integer> {
         if (this.version || this.help) {
             this.depth = 0;
         }
+
+        if (this.charsetString.isEmpty()) {
+            this.charset = CharsetConverter.convert(System.getenv().getOrDefault("LSPP_CHARSET", "ascii"));
+        } else {
+            this.charset = CharsetConverter.convert(this.charsetString);
+        }
     }
 
     /**
@@ -188,9 +203,34 @@ public class App implements Callable<Integer> {
         }
 
         FileTreeFactory treeFactory = new FileTreeFactory();
-        FileTree tree = treeFactory.makeFileTree();
-        Files.walk(path, FileVisitOption.FOLLOW_LINKS).forEach(tree::add);
-        return tree;
+        ArrayList<Path> paths = new ArrayList<>();
+        Files.walkFileTree(path, new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                paths.add(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {
+                if (!App.this.noSkip) {
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    throw e;
+                }
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) {
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return treeFactory.makeFileTree(paths);
     }
 
     /**
@@ -207,9 +247,34 @@ public class App implements Callable<Integer> {
         }
 
         FileTreeFactory treeFactory = new FileTreeFactory();
-        FileTree tree = treeFactory.makeFileTree();
-        Files.walk(path, depth, FileVisitOption.FOLLOW_LINKS).forEach(tree::add);
-        return tree;
+        ArrayList<Path> paths = new ArrayList<>();
+        Files.walkFileTree(path, new HashSet<FileVisitOption>(), depth, new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                paths.add(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {
+                if (!App.this.noSkip) {
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    throw e;
+                }
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) {
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return treeFactory.makeFileTree(paths);
     }
 
     /**
@@ -227,13 +292,36 @@ public class App implements Callable<Integer> {
         }
 
         FileTreeFactory treeFactory = new FileTreeFactory();
-        ArrayList<Path> allMatching = new ArrayList<>();
-        Files.walk(path, FileVisitOption.FOLLOW_LINKS).forEach(p -> {
-           if (p.toString().matches(regex) || p.getFileName().toString().matches(regex)) {
-                allMatching.add(path.getFileName().resolve(path.relativize(p)));
-           } 
+        ArrayList<Path> paths = new ArrayList<>();
+        Files.walkFileTree(path, new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                if (file.toString().matches(regex) || file.getFileName().toString().matches(regex)) {
+                    paths.add(path.getFileName().resolve(path.relativize(file)));
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {
+                if (!App.this.noSkip) {
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    throw e;
+                }
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) {
+                return FileVisitResult.CONTINUE;
+            }
         });
-        return treeFactory.makeFileTree(allMatching);
+        return treeFactory.makeFileTree(paths);
     }
 
     /**
@@ -254,13 +342,36 @@ public class App implements Callable<Integer> {
         }
 
         FileTreeFactory treeFactory = new FileTreeFactory();
-        ArrayList<Path> allMatching = new ArrayList<>();
-        Files.walk(path, depth, FileVisitOption.FOLLOW_LINKS).forEach(p -> {
-            if (p.toString().matches(regex) || p.getFileName().toString().matches(regex)) {
-                allMatching.add(path.getFileName().resolve(path.relativize(p)));
+        ArrayList<Path> paths = new ArrayList<>();
+        Files.walkFileTree(path, new HashSet<FileVisitOption>(), depth, new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                if (file.toString().matches(regex) || file.getFileName().toString().matches(regex)) {
+                    paths.add(path.getFileName().resolve(path.relativize(file)));
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {
+                if (!App.this.noSkip) {
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    throw e;
+                }
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) {
+                return FileVisitResult.CONTINUE;
             }
         });
-        return treeFactory.makeFileTree(allMatching);
+        return treeFactory.makeFileTree(paths);
     }
 
     /**
@@ -287,13 +398,36 @@ public class App implements Callable<Integer> {
         }
 
         FileTreeFactory treeFactory = new FileTreeFactory();
-        ArrayList<Path> allMatching = new ArrayList<>();
-        Files.walk(path, FileVisitOption.FOLLOW_LINKS).forEach(p -> {
-            if (toSearch.equals(p) || toSearch.equals(p.getFileName())) {
-                allMatching.add(path.getFileName().resolve(path.relativize(p)));
+        ArrayList<Path> paths = new ArrayList<>();
+        Files.walkFileTree(path, new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                if (toSearch.equals(file) || toSearch.equals(file.getFileName())) {
+                    paths.add(path.getFileName().resolve(path.relativize(file)));
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {
+                if (!App.this.noSkip) {
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    throw e;
+                }
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) {
+                return FileVisitResult.CONTINUE;
             }
         });
-        return treeFactory.makeFileTree(allMatching);
+        return treeFactory.makeFileTree(paths);
     }
 
     /**
@@ -311,12 +445,35 @@ public class App implements Callable<Integer> {
         }
 
         FileTreeFactory treeFactory = new FileTreeFactory();
-        ArrayList<Path> allMatching = new ArrayList<>();
-        Files.walk(path, depth, FileVisitOption.FOLLOW_LINKS).forEach(p -> {
-            if (toSearch.equals(p) || toSearch.equals(p.getFileName())) {
-                allMatching.add(path.getFileName().resolve(path.relativize(p)));
+        ArrayList<Path> paths = new ArrayList<>();
+        Files.walkFileTree(path, new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                if (toSearch.equals(file) || toSearch.equals(file.getFileName())) {
+                    paths.add(path.getFileName().resolve(path.relativize(file)));
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException e) throws IOException {
+                if (!App.this.noSkip) {
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    throw e;
+                }
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) {
+                return FileVisitResult.CONTINUE;
             }
         });
-        return treeFactory.makeFileTree(allMatching);
+        return treeFactory.makeFileTree(paths);
     }
 }

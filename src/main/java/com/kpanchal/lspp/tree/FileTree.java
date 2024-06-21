@@ -10,15 +10,12 @@ import java.nio.file.Path;
 public class FileTree {
     // The root node of the FileTree
     private FileTree.FileTreeNode head;
-    // How many layers the FileTree has
-    private int depth;
 
     /**
      * Constructs an empty FileTree
      */
     FileTree() {
         this.head = null;
-        this.depth = 0;
     }
 
     /**
@@ -27,7 +24,6 @@ public class FileTree {
      */
     FileTree(FileTree.FileTreeNode head) {
         this.head = head;
-        this.depth = 1;
     }
 
     /**
@@ -36,14 +32,6 @@ public class FileTree {
      */
     public FileTree.FileTreeNode getHead() {
         return this.head;
-    }
-
-    /**
-     * Gets the depth of the FileTree
-     * @return the depth of the FileTree
-     */
-    public int getDepth() {
-        return this.depth;
     }
 
     /**
@@ -56,7 +44,6 @@ public class FileTree {
         } else {
             this.add(toAdd, head);
         }
-        this.depth = this.calculateDepth(head);
     }
 
     /**
@@ -80,20 +67,6 @@ public class FileTree {
             }
             return false;
         }
-    }
-
-    /**
-     * Calculates the depth of the FileTree. A depth of 1 is just the head of the FileTree, and any
-     * subsequent layer of subdirectories increases the depth by 1.
-     * @param head the current node of the FileTree depth calculation algorithm
-     * @return the depth of the FileTree
-     */
-    private int calculateDepth(FileTree.FileTreeNode head) {
-        if (head.childless()) {
-            return 1;
-        } else {
-            return 1 + head.getChildren().stream().map(this::calculateDepth).max(Integer::compare).get();
-        } 
     }
 
     /**

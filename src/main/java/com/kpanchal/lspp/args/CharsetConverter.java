@@ -1,12 +1,10 @@
 package com.kpanchal.lspp.args;
 
-import picocli.CommandLine.ITypeConverter;
-
 /**
  * A class for converting a String command-line input into a CharsetEnum for usage in the {@code lspp} command
  * @author Kedar Panchal
  */
-public class CharsetConverter implements ITypeConverter<CharsetEnum> {
+public class CharsetConverter {
     /**
      * Converts a String command-line input into a CharsetEnum for usage in the {@code lspp} command.<br>Valid values
      * are (case-insensitive):
@@ -20,7 +18,7 @@ public class CharsetConverter implements ITypeConverter<CharsetEnum> {
      * @return the CharsetEnum equivalent of the String command-line argument
      * @throws Exception if {@code lspp} cannot recognize the parameter
      */
-    public CharsetEnum convert(String value) throws Exception {
+    public static CharsetEnum convert(String value) {
         switch (value.toLowerCase()) {
             case "box":
                 return CharsetEnum.BOX;
