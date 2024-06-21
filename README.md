@@ -15,6 +15,7 @@
     * [Downloading the executable jar](#downloading-the-executable-jar)
     * [Building from source](#building-from-source-1)
 * [Usage](#usage)
+  * [The `LSPP_CHARSET` environment variable](#the-lspp_charset-environment-variable)
 * [Troubleshooting](#troubleshooting)
   * [On Windows](#troubleshooting-on-windows)
     * [Executing `install.ps1`](#powershell-script-execution)
