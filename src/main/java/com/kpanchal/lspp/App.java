@@ -34,7 +34,7 @@ import com.kpanchal.lspp.args.PathConverter;
  * structure
  * @author Kedar Panchal
  */
-@Command(name="lspp", version="lspp 2.0.0", description="Lists the files in a folder in a tree-style output\n\nWritten by Kedar Panchal\n", sortOptions=false)
+@Command(name="lspp", version="lspp 2.1.0", description="Lists the files in a folder in a tree-style output\n\nWritten by Kedar Panchal\n", sortOptions=false)
 public class App implements Callable<Integer> {
     // Contains version and help information for the lspp command
     @Spec CommandSpec spec;
@@ -66,7 +66,7 @@ public class App implements Callable<Integer> {
     private String regex;
 
     // The charset used to display the FileTree with
-    @Option(names={"-c", "--charset"}, defaultValue="", description="The charset to use when displaying the file tree (default: ASCII). Valid values (case-insensitive): ${COMPLETION-CANDIDATES}.")
+    @Option(names={"-c", "--charset"}, defaultValue="", description="The charset to use when displaying the file tree (default: ASCII). Valid values (case-insensitive): ASCII, BOX, ROUND, TUBE.")
     private String charsetString;
     private CharsetEnum charset;
 
