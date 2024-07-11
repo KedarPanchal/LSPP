@@ -1,0 +1,6 @@
+Package: lspp
+Version: 2.1.0
+Architecture: amd64
+Depends: libc6 (>= 2.34), zlib1g (>= 1:1.1.4)
+Maintainer: Kedar Panchal <kedar.t.panchal@outlook.com>
+Description: A program that lists files in a tree-style format.
