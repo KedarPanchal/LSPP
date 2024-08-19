@@ -37,7 +37,7 @@
 
 #### Downloading the executables
 Install and extract the `Windows executable + executuable .jar (.zip)` file from the
-[latest release](https://github.com/KedarPanchal/). Add the `lspp.exe` executable to your path by running the following
+[latest release](https://github.com/KedarPanchal/LSPP/releases/latest). Add the `lspp.exe` executable to your path by running the following
 in a powershell instance:
 ```powershell
 [Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User) + ";" + "C:\path\to\lspp\parent", [System.EnvironmentVariableTarget]::User)
